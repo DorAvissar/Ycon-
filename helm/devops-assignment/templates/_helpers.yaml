@@ -1,0 +1,6 @@
+{{/*
+Generate a name that includes the release name to avoid collisions
+*/}}
+{{- define "devops-assignment.fullname" -}}
+{{- printf "%s-%s" .Release.Name .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

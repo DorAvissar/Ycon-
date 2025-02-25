@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "devops-assignment.fullname" . }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "devops-assignment.fullname" . }}
+  ports:
+    - port: 80
+      targetPort: {{ .Values.port }}
+      protocol: TCP
+      name: http

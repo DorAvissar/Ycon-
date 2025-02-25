@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: {{ include "devops-assignment.fullname" . }}
+  labels:
+    app: {{ include "devops-assignment.fullname" . }}
+
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "devops-assignment.fullname" . }}
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.rollingUpdate.maxSurge }}
+      maxUnavailable: {{ .Values.rollingUpdate.maxUnavailable }}
+      
+  template:
+    metadata:
+      labels:
+        app: {{ include "devops-assignment.fullname" . }}
+    spec:
+      containers:
+        - name: devops-assignment
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: [ "{{ .Values.command }}" ]
+          # args: [ "{{ .Values.args }}" ]
+          env:
+            - name: NODE_ENV
+              value: "{{ .Values.environment.NODE_ENV }}"
+          ports:
+            - containerPort: {{ .Values.port }}
+          resources:
+            requests:
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
+---

@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: devops-assignment  
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# command: "node"
+# args: "k8s-test.js"
+
+port: 8080
+
+environment:
+  NODE_ENV: "production"
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "50m"
+  limits:
+    memory: "1Gi"
+    cpu: "500m"  
+
+rollingUpdate:
+  maxSurge: 1 
+  maxUnavailable: 0 
+
+mongo:
+  image: "mongo"
+  tag: "latest"
+  pullPolicy: IfNotPresent
+  port: 27017
