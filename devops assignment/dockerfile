@@ -3,51 +3,47 @@
 # ===========================
 FROM node:18-alpine AS builder
 
-# Create and switch to /app directory
+# Set working directory for the build stage
 WORKDIR /app
 
 # Copy package.json and install dependencies
 COPY package.json ./
-# Installs the app’s dependencies (e.g., Express, Mongoose, etc.) into
 RUN npm install 
 
-# Copy source files (including k8s-test.js, docker-test.js, etc.)
+# Copy all source files (including k8s-test.js, docker-test.js, start.sh, etc.)
 COPY . .
 
 # ===========================
 #   STAGE 2: Final
 # ===========================
-# Starts a fresh Node.js 18 Alpine image
 FROM node:18-alpine
 
-# Install required packages
+# Install required system packages
 RUN apk update && \
     apk add --no-cache ca-certificates bash vim procps curl && \
     rm -rf /var/cache/apk/*
 
-# Create user and group with specific IDs
+# Create a user and group with specific IDs (UID and GID 1500)
 RUN addgroup -g 1500 user && \
     adduser -u 1500 -G user -h /home/user -D user
 
-
-# Set the HOME environment variable explicitly
+# Set HOME environment variable
 ENV HOME=/home/user
 
-
-# Create the home directory for our user and set ownership
+# Set working directory and ensure proper ownership
 WORKDIR /home/user
 RUN chown -R user:user /home/user
 
-# Copy only the final artifacts from the builder stage
+# Copy the built artifacts from the builder stage
 COPY --chown=user:user --from=builder /app /home/user
 
-# Make start.sh executable
+# Ensure start.sh is executable (if you use it)
 RUN chmod +x ./start.sh
 
-# Switch to our user
-USER user
+ENTRYPOINT ["bash", "-c", "node \"$0\" && node docker-test.js", "--"]
 
-# Expose port 8080 (if your app runs on 8080)
+# Expose port 8080 if your application listens there
 EXPOSE 8080
 
-ENTRYPOINT ["./start.sh"]
+# Switch to the created user for security
+USER user
