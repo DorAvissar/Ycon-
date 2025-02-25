@@ -27,8 +27,8 @@ spec:
         - name: devops-assignment
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # command: [ "{{ .Values.command }}" ]
-          # args: [ "{{ .Values.args }}" ]
+          command: [ "{{ .Values.command }}" ]
+          args: [ "{{ .Values.args }}" ]
           env:
             - name: NODE_ENV
               value: "{{ .Values.environment.NODE_ENV }}"

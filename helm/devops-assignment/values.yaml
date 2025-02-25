@@ -5,8 +5,8 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
-# command: "node"
-# args: "k8s-test.js"
+command: "node"
+args: "k8s-test.js"
 
 port: 8080
 
