@@ -95,6 +95,26 @@ kubectl port-forward svc/<svc name> 8080:80
 ```
 enter  http://localhost:8080
 
+## Key Decisions: 
+
+1. Handling the CMD/ENTRYPOINT Conflict:
+
+   During the assignment, I initially attempted to set the command as node with args: k8s-test.js in the values file. 
+   However, I encountered issues because this configuration was overwriting the CMD/ENTRYPOINT defined in the Dockerfile. 
+   To resolve this, I removed these parameters from the values file so that the Dockerfile's ENTRYPOINT (which calls start.sh) is used. This ensures that the correct startup sequence is maintained.
+
+2. Pre-deployment Database Check:
+   A critical requirement was to verify the MongoDB connection before the application is deployed. 
+   To achieve this, I implemented an init container that runs the k8s-test.js script. 
+   This init container attempts to connect to MongoDB and only allows the main application container to start if the connection is successful. 
+
+   This approach guarantees that the application doesn’t run unless the necessary database dependency is available.
+
+3. Learning from Multi-Stage Docker Builds:
+The assignment gave me the opportunity to work with multi-stage Docker builds. By separating the build and runtime environments, I was able to create an optimized Docker image with a smaller footprint.
+
+4. Clean and Parameterized Helm Chart:
+For the deployment, I created a clean, parameterized Helm chart. The idea was to keep all configurable parameters in the values.yaml file, allowing easy adjustments without modifying the chart templates. This makes the solution flexible and maintainable. 
 
 ## Customizing Parameters
 1. Rolling Updates
