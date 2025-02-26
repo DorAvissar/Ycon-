@@ -40,10 +40,12 @@ COPY --chown=user:user --from=builder /app /home/user
 # Ensure start.sh is executable (if you use it)
 RUN chmod +x ./start.sh
 
-ENTRYPOINT ["bash", "-c", "node \"$0\" && node docker-test.js", "--"]
 
 # Expose port 8080 if your application listens there
 EXPOSE 8080
 
 # Switch to the created user for security
 USER user
+
+
+ENTRYPOINT ["./start.sh"]
