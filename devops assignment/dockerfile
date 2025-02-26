@@ -1,24 +1,18 @@
-# ===========================
 #   STAGE 1: Builder
-# ===========================
 FROM node:18-alpine AS builder
 
-# Set working directory for the build stage
 WORKDIR /app
 
-# Copy package.json and install dependencies
 COPY package.json ./
+
 RUN npm install 
 
-# Copy all source files (including k8s-test.js, docker-test.js, start.sh, etc.)
 COPY . .
 
-# ===========================
+
 #   STAGE 2: Final
-# ===========================
 FROM node:18-alpine
 
-# Install required system packages
 RUN apk update && \
     apk add --no-cache ca-certificates bash vim procps curl && \
     rm -rf /var/cache/apk/*
@@ -40,12 +34,10 @@ COPY --chown=user:user --from=builder /app /home/user
 # Ensure start.sh is executable (if you use it)
 RUN chmod +x ./start.sh
 
-
 # Expose port 8080 if your application listens there
 EXPOSE 8080
 
 # Switch to the created user for security
 USER user
-
 
 ENTRYPOINT ["./start.sh"]

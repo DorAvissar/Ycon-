@@ -27,13 +27,11 @@ spec:
         - name: pre-deployment
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # CHANGE: Added initContainer to run pre-deployment test
           command: ["/bin/bash", "-c", "echo Running pre-deployment tests; node k8s-test.js"]
       containers:
         - name: devops-assignment
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          # Use the container's default ENTRYPOINT (start.sh) so no command override is needed
           env:
             - name: NODE_ENV
               value: "{{ .Values.environment.NODE_ENV }}"

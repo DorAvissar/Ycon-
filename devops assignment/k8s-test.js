@@ -8,7 +8,6 @@ async function main() {
     });
     
     console.log('connected to mongo')
-    // CHANGE: Mandatory exit to allow initContainer to complete successfully
     process.exit(0);
     
     const mongo = mongoose.connection;
