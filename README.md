@@ -35,6 +35,7 @@ This project demonstrates containerization, orchestration, and deployment of a N
 
    ```bash
    git clone <repo-url>
+   cd ycon-
    cd devops-assignment
    ```
 
@@ -59,12 +60,6 @@ Deploys a separate MongoDB container using the official MongoDB image.
 - InitContainer for Pre-deployment Testing:
 An initContainer is configured in the application deployment. This initContainer runs a pre-deployment test script (k8s-test.js) that attempts to connect to the MongoDB service. If the script successfully connects, it exits with a zero exit code, allowing the main application container to start. If the MongoDB connection fails, the initContainer exits with a non-zero code, and Kubernetes will not proceed with starting the main container.
 
-To inspect the pre-deployment check, run:
-```
-kubectl logs <pod-name> -c pre-deployment
-```
-( I simulate a failure (e.g., by stopping MongoDB) to verify that the initContainer prevents the main container from starting )
-
 ### The Helm chart is fully parameterized via values.yaml.  can customize the  parameters without changing the chart templates.
 
 ## how to deploy? 
@@ -72,6 +67,7 @@ open the k8s on docker desktop
 
 Navigate to the Helm chart directory:
 ```
+cd ..
 cd helm
 cd devops assignment 
 ```
@@ -86,6 +82,12 @@ kubectl get deployments
 kubectl get pods
 kubectl get svc
 ```
+
+To inspect the pre-deployment check, run:
+```
+kubectl logs <pod-name> -c pre-deployment
+```
+( I simulate a failure (e.g., by stopping MongoDB) to verify that the initContainer prevents the main container from starting )
 
 run the following command the expose the service:
 ```
