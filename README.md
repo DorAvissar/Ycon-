@@ -36,7 +36,7 @@ This project demonstrates containerization, orchestration, and deployment of a N
    ```bash
    git clone <repo-url>
    cd ycon-
-   cd devops-assignment
+   cd devops assignment
    ```
 
 open docker desktop 

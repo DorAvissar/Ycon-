@@ -39,4 +39,4 @@ EXPOSE 8080
 # Switch to the created user for security
 USER user
 
-ENTRYPOINT ["./start.sh"]
+ENTRYPOINT ["/bin/bash", "./start.sh"]
